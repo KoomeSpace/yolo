@@ -1,0 +1,21 @@
+# Stage 1: Build Node.js app
+FROM node:13-alpine as build
+
+WORKDIR /app
+
+COPY server/package*.json ./
+RUN npm install
+
+COPY server .
+RUN npm run build
+
+# Stage 2: Final image with just the built app
+FROM node:13-alpine as production
+
+WORKDIR /app
+
+COPY --from=build /app .
+
+EXPOSE 5000
+
+CMD ["npm", "start"]
