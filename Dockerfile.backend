@@ -7,7 +7,6 @@ COPY backend/package*.json ./
 RUN npm install
 
 COPY backend .
-RUN npm run build
 
 # Stage 2: Use Node.js to serve built files
 FROM node:13-alpine as production
@@ -19,3 +18,4 @@ COPY --from=build /app/build /app/build
 EXPOSE 3001
 
 CMD ["node", "server.js"]
+
