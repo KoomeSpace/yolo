@@ -13,7 +13,7 @@ FROM node:13-alpine as production
 
 WORKDIR /app
 
-COPY --from=build /app/build /app/build
+COPY --from=build /app .
 
 EXPOSE 3001
 
