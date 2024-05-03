@@ -3,19 +3,19 @@ FROM node:13-alpine as build
 
 WORKDIR /app
 
-COPY server/package*.json ./
+COPY backend/package*.json ./
 RUN npm install
 
-COPY server .
+COPY backend .
 RUN npm run build
 
-# Stage 2: Final image with just the built app
+# Stage 2: Use Node.js to serve built files
 FROM node:13-alpine as production
 
 WORKDIR /app
 
-COPY --from=build /app .
+COPY --from=build /app/build /app/build
 
-EXPOSE 5000
+EXPOSE 3001
 
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
