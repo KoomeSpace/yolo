@@ -49,3 +49,4 @@ The backend Dockerfile is responsible for building the Node.js app.
 
 These Dockerfiles follow a multi-stage build approach to optimize the final image size. They use the `node:13-alpine` base image, which is a lightweight version of Node.js, and leverage Docker's layer caching mechanism to minimize build times.
 
+![A screenshot of the frontend and backend images pushed to my dockerhub repo](screenshot.png)
