@@ -1,0 +1,13 @@
+---
+- name: Install MongoDB
+  apt:
+    name: mongodb
+    state: present
+  tags: mongodb
+
+- name: Start MongoDB service
+  service:
+    name: mongod
+    state: started
+    enabled: yes
+  tags: mongodb

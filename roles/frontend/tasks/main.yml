@@ -1,0 +1,13 @@
+---
+- name: Build the frontend Docker image
+  command: docker build -t frontend -f /var/www/html/yolo/client/Dockerfile /var/www/html/yolo/client
+  tags: frontend
+
+- name: Run the frontend Docker container
+  docker_container:
+    name: frontend
+    image: frontend
+    state: started
+    ports:
+      - "3000:3000"
+  tags: frontend

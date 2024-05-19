@@ -1,0 +1,13 @@
+---
+- name: Build the backend Docker image
+  command: docker build -t backend -f /var/www/html/yolo/backend/Dockerfile /var/www/html/yolo/backend
+  tags: backend
+
+- name: Run the backend Docker container
+  docker_container:
+    name: backend
+    image: backend
+    state: started
+    ports:
+      - "3001:3001"
+  tags: backend
