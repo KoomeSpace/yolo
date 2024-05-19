@@ -1,0 +1,20 @@
+---
+- name: Setup Dockerized E-commerce Application
+  hosts: all
+  become: yes
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - role: common
+    - role: docker
+    - role: frontend
+    - role: backend
+    - role: mongodb
+
+  tasks:
+    - name: Clone the GitHub repository
+      git:
+        repo: 'https://github.com/KoomeSpace/yolo.git'
+        dest: /var/www/html/yolo
+      tags: clone
