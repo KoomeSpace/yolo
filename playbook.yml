@@ -1,90 +1,81 @@
 ---
 - name: Setup Dockerized E-commerce Application
-  hosts: all
-  become: yes
+  hosts: localhost
+  connection: local
+  become: true
   vars_files:
     - vars/main.yml
-
-  roles:
-    - role: common
-    - role: docker
-    - role: frontend
-    - role: backend
-    - role: mongodb
-
   tasks:
     - name: Clone the GitHub repository
       git:
-        repo: 'https://github.com/KoomeSpace/yolo.git'
-        dest: /var/www/html/yolo
-      tags: clone
+        repo: "{{ github_repo }}"
+        dest: "{{ project_src }}"
+      tags: 
+        - clone
+
+    - name: Include roles for setup
+      include_role:
+        name: "{{ item }}"
+      with_items:
+        - docker
+        - frontend
+        - backend
+        - mongodb
+      tags:
+        - setup
 
 - name: Set up the application
-  hosts: all
-  become: yes
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars/main.yml
   tasks:
     - name: Install frontend dependencies
       command: npm install
       args:
-        chdir: /var/www/html/yolo/client
-      tags: setup
+        chdir: "{{ frontend_app_directory }}"
+      tags: 
+        - setup
 
     - name: Install backend dependencies
       command: npm install
       args:
-        chdir: /var/www/html/yolo/backend
-      tags: setup
+        chdir: "{{ backend_app_directory }}"
+      tags: 
+        - setup
 
     - name: Build frontend Docker image
-      command: docker build -t "{{ frontend }}" -f /var/www/html/yolo/client/Dockerfile /var/www/html/yolo/client
-      tags: setup
+      command: docker build -t "koomespace1/frontend" -f "{{ frontend_app_directory }}/Dockerfile" "{{ frontend_app_directory }}"
+      tags: 
+        - setup
 
     - name: Build backend Docker image
-      command: docker build -t "{{ backend }}" -f /var/www/html/yolo/backend/Dockerfile /var/www/html/yolo/backend
-      tags: setup
+      command: docker build -t "koomespace1/backend" -f "{{ backend_app_directory }}/Dockerfile" "{{ backend_app_directory }}"
+      tags: 
+        - setup
 
+- name: Run the application containers
+  hosts: localhost
+  become: true
+  vars_files:
+    - vars/main.yml
+  tasks:
     - name: Run frontend Docker container
       docker_container:
-        name: "{{ frontend }}"
-        image: "{{ frontend }}"
+        name: frontend
+        image: "koomespace1/frontend"
         state: started
         ports:
           - "3000:3000"
-      tags: setup
+      tags: 
+        - setup
 
     - name: Run backend Docker container
       docker_container:
-        name: "{{ backend }}"
-        image: "{{ backend }}"
+        name: backend
+        image: "koomespace1/backend"
         state: started
         ports:
           - "3001:3001"
-      tags: setup
-
-    - name: Run MongoDB Docker container
-      docker_container:
-        name: "{{ mongodb }}"
-        image: mongo
-        state: started
-        ports:
-          - "27017:27017"
-      tags: setup
-
-- name: Verify the application
-  hosts: all
-  tasks:
-    - name: Check if frontend is running
-      uri:
-        url: http://localhost:3000
-      register: frontend_response
-      until: frontend_response.status == 200
-      retries: 10
-      delay: 5
-
-    - name: Check if backend is running
-      uri:
-        url: http://localhost:3001
-      register: backend_response
-      until: backend_response.status == 200
-      retries: 10
-      delay: 5
+      tags: 
+        - setup
