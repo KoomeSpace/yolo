@@ -1,0 +1,2 @@
+# hosts
+yolo-server ansible_connection=local
