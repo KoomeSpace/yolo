@@ -1,19 +1,4 @@
 # vars/main.yml
-
-# Defines  variables for the frontend
-frontend:
-  port: 3000
-  image: "frontend"
-  container_name: "frontend"
-
-# Define variables for the backend
-backend:
-  port: 3001
-  image: "backend"
-  container_name: "backend"
-
-# Define variables for MongoDB
-mongodb:
-  port: 27017
-  image: "mongo"
-  container_name: "MongoDB"
+frontend: "frontend"
+backend: "backend"
+mongodb: "mongodb"
