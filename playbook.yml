@@ -1,6 +1,6 @@
 ---
 - name: Setup Dockerized E-commerce Application
-  hosts: vagrant
+  hosts: all
   become: yes
   vars_files:
     - vars/main.yml
@@ -20,7 +20,7 @@
       tags: clone
 
 - name: Set up the application
-  hosts: vagrant
+  hosts: all
   become: yes
   tasks:
     - name: Install frontend dependencies
@@ -64,14 +64,14 @@
     - name: Run MongoDB Docker container
       docker_container:
         name: "{{ mongodb }}"
-        image: "{{ mongodb }}"
+        image: mongo
         state: started
         ports:
           - "27017:27017"
       tags: setup
 
 - name: Verify the application
-  hosts: localhost
+  hosts: all
   tasks:
     - name: Check if frontend is running
       uri:
