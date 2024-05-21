@@ -1,6 +1,6 @@
 ---
 - name: Setup Dockerized E-commerce Application
-  hosts: all
+  hosts: vagrant
   become: yes
   vars_files:
     - vars/main.yml
@@ -20,27 +20,33 @@
       tags: clone
 
 - name: Set up the application
-  hosts: all
+  hosts: vagrant
   become: yes
   tasks:
-    - name: Install dependencies
+    - name: Install frontend dependencies
       command: npm install
       args:
         chdir: /var/www/html/yolo/client
       tags: setup
 
+    - name: Install backend dependencies
+      command: npm install
+      args:
+        chdir: /var/www/html/yolo/backend
+      tags: setup
+
     - name: Build frontend Docker image
-      command: docker build -t frontend -f /var/www/html/yolo/client/Dockerfile /var/www/html/yolo/client
+      command: docker build -t "{{ frontend }}" -f /var/www/html/yolo/client/Dockerfile /var/www/html/yolo/client
       tags: setup
 
     - name: Build backend Docker image
-      command: docker build -t backend -f /var/www/html/yolo/backend/Dockerfile /var/www/html/yolo/backend
+      command: docker build -t "{{ backend }}" -f /var/www/html/yolo/backend/Dockerfile /var/www/html/yolo/backend
       tags: setup
 
     - name: Run frontend Docker container
       docker_container:
-        name: frontend
-        image: frontend
+        name: "{{ frontend }}"
+        image: "{{ frontend }}"
         state: started
         ports:
           - "3000:3000"
@@ -48,11 +54,20 @@
 
     - name: Run backend Docker container
       docker_container:
-        name: backend
-        image: backend
+        name: "{{ backend }}"
+        image: "{{ backend }}"
         state: started
         ports:
           - "3001:3001"
+      tags: setup
+
+    - name: Run MongoDB Docker container
+      docker_container:
+        name: "{{ mongodb }}"
+        image: "{{ mongodb }}"
+        state: started
+        ports:
+          - "27017:27017"
       tags: setup
 
 - name: Verify the application
