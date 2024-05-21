@@ -1,2 +1,2 @@
-# hosts
+[all]
 yolo-server ansible_connection=local
