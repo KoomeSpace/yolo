@@ -53,35 +53,48 @@ The Backend Service manifest (`backend-service.yaml`) exposes the backend applic
 
 To apply the manifests and deploy the applications, follow these steps:
 
+
+**Apply the Frontend Service**
 ```sh
-# Apply the Frontend Service
 kubectl apply -f frontend-service.yaml
+
+**Apply the Backend Deployment**
 ```sh
-# Apply the Backend Deployment
 kubectl apply -f backend-deployment.yaml
+
+**Apply the Backend Service**
 ```sh
-# Apply the Backend Service
 kubectl apply -f backend-service.yaml
-# Check the frontend deployment
+
+**Check the frontend deployment**
+```sh
 kubectl get deployments
+
+**Check frontend pods**
 ```sh
-# Check frontend pods
 kubectl get pods
+
+**Check the frontend service**
 ```sh
-# Check the frontend service
 kubectl get services
+
+**eck the backend deployment**
 ```sh
-# Check the backend deployment
 kubectl get deployments
+
+
+**Check backend pods**
 ```sh
-# Check backend pods
 kubectl get pods
-```sh
-# Check the backend service
+
+**Check the backend service**
+``sh
 kubectl get services
+
+**Access the frontend application**
 ```sh
-# Access the frontend application
 kubectl get svc frontend-service
+
+**Access the backend application**
 ```sh
-# Access the backend application
 kubectl get svc backend-service
