@@ -45,4 +45,22 @@ To apply the manifests and deploy the application, follow these steps:
 
 1. **Apply the Deployment:**
    ```sh
-   kubectl apply -f frontend-deployment.yaml
+   kubectl apply -f frontend-deployment.yml
+2. **Apply the Service:**
+   ```sh
+   kubectl apply -f frontend-service.yml
+
+## Verification
+To verify that the application is running correctly:
+1. **Check the deployment**
+   ```sh kubectl get deployments
+2. **Check pods**
+   ```sh
+    kubectl get pods
+3. **Check the Service**
+   ```sh
+    kubectl get services
+4. **Access the application**
+    ```sh kubectl get svc frontend-service
+
+
