@@ -53,7 +53,9 @@ To apply the manifests and deploy the application, follow these steps:
 ## Verification
 To verify that the application is running correctly:
 1. **Check the deployment**
-   ```sh kubectl get deployments
+   ```sh
+   
+ kubectl get deployments
 2. **Check pods**
    ```sh
     kubectl get pods
@@ -61,6 +63,5 @@ To verify that the application is running correctly:
    ```sh
     kubectl get services
 4. **Access the application**
-    ```sh kubectl get svc frontend-service
-
-
+    ```sh
+    kubectl get svc frontend-service
